@@ -23,46 +23,50 @@ def key_creater(key):
           for k in range(10):
             d.append(str(j)+str(i)+str(g)+str(k))
     return d[key]
-            
+
         
 
 def get_data_dog(url):
     headers ={
         "user-agent":"Dima"
-    } 
+    }
     
-    
-    req=requests.get(url,headers)
-    with open("dogs.html", "w", encoding="utf-8") as file:
-         file.write(req.text)
-         
-    with open("dogs.html", encoding="utf-8") as file:
-        src = file.read()
+    for i in range(3,10):
+        params={'p':i}    
+        req=requests.get(url,params)
+        print(req.url)
+
+        with open("dogs.html", "w", encoding="utf-8") as file:
+            file.write(req.text)
+            
+        with open("dogs.html", encoding="utf-8") as file:
+            src = file.read()
+            
+        soup = BeautifulSoup(src, "lxml")
+
+        try:
+            images = soup.find_all("img", class_ ="justifier__thumb")
         
-    soup = BeautifulSoup(src, "lxml")
-    try:
-        images = soup.find_all("img", class_ ="justifier__thumb")
-    
-    except Exception:
-        images = "Нет картинок"
-    
-    count = 1
-    for img in images:
+        except Exception:
+            images = "Нет картинок"
         
-        url = img['src']
-        source = "https:" + url
-        picture = requests.get(source)
-        
-        if not os.path.exists(dataset_path):
-            os.mkdir(dataset_path)   
-        if not os.path.exists(dog_path):
-                os.mkdir(dog_path)  
-                      
-        out = open(dog_path + '/' + str(key_creater(count)) + '.jpg', 'wb') 
-        out.write(picture.content)
-        out.close()
-        
-        count+=1
+        count = 1
+        for img in images:
+            
+            url = img['src']
+            source = "https:" + url
+            picture = requests.get(source)
+            
+            if not os.path.exists(dataset_path):
+                os.mkdir(dataset_path)   
+            if not os.path.exists(dog_path):
+                    os.mkdir(dog_path)  
+                        
+            out = open(dog_path + '/' + str(key_creater(count)) + '.jpg', 'wb') 
+            out.write(picture.content)
+            out.close()
+            
+            count+=1
         
     
 def get_data_cat(url):
@@ -105,7 +109,7 @@ def get_data_cat(url):
         count += 1
         
 get_data_dog("https://yandex.ru/images/search?text=%20dog")
-get_data_cat("https://yandex.ru/images/search?text=cat")
+#get_data_cat("https://yandex.ru/images/search?text=cat")
 
 
 
