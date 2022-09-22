@@ -1,5 +1,8 @@
 import os
+import string
+import random
 import time
+from unicodedata import name
 import requests
 from bs4 import BeautifulSoup
 
@@ -10,13 +13,21 @@ cat_path = "C://Users/User/nuck figgers/dataset/cat"
 
 def get_data_dog(count_imgs):
     
-    _headers ={
-        "User-Agent": "Dima"
-    }
+    if not os.path.exists(dataset_path):
+        os.mkdir(dataset_path)   
+    if not os.path.exists(dog_path):
+        os.mkdir(dog_path)
     
     count=0
     
-    for i in range(0,10):
+    for i in range(0,999):
+        
+        letters = string.ascii_lowercase
+        rand_string = ''.join(random.sample(letters, 10))
+        
+        _headers ={
+            "User-Agent": rand_string
+        }
         
         url = f"https://yandex.ru/images/search?p={i}&text=dog&uinfo=sw-1920-sh-1080-ww-912-wh-881-pd-1.100000023841858-wp-16x9_2560x1440&lr=51&rpt=image"
         req=requests.get(url, headers=_headers)
@@ -37,13 +48,11 @@ def get_data_dog(count_imgs):
         for img_url in src_list:
             if img_url.find("n=13") !=-1:
                 try:
+                    print("Картинка", count)
                     source = "https:" + img_url
                     picture = requests.get(source)
                     
-                    if not os.path.exists(dataset_path):
-                        os.mkdir(dataset_path)   
-                    if not os.path.exists(dog_path):
-                            os.mkdir(dog_path)  
+                      
                     
                     name_file=str(count)
                           
@@ -51,60 +60,83 @@ def get_data_dog(count_imgs):
                     out.write(picture.content)
                     out.close()
                     
+                    time.sleep(0.25)
+                    
                     count+=1
                     if(count==count_imgs):
                         return
                     
                 except Exception:
                     print("Error in: ", count)
-        
-
-        for sec in range(1,61):
-            print("Осталось ", 60-sec)
-            time.sleep(1)
                     
        
     
-def get_data_cat(url):
-    headers ={
-        "user-agent":"Dima"
-    } 
+def get_data_cat(count_imgs):
     
-    req=requests.get(url,headers)
-    with open("cats.html", "w", encoding="utf-8") as file:
-         file.write(req.text)
-         
-    with open("cats.html", encoding="utf-8") as file:
-        src = file.read()
+    if not os.path.exists(dataset_path):
+        os.mkdir(dataset_path)   
+    if not os.path.exists(cat_path):
+        os.mkdir(cat_path)
         
-    soup = BeautifulSoup(src, "lxml")
+    count=0
     
-    try: 
-        images = soup.fin_all("img", class_ ="justifier__thumb")
-    
-    except Exception:
-        images = "Нет картинок"
-    
-    
-    count = 1
-    for img in images:
+    for i in range(0,999):
         
-        url = img['src']
-        source = "https:" + url
-        picture = requests.get(source)
+        letters = string.ascii_lowercase
+        rand_string = ''.join(random.sample(letters, 10))
+        _headers ={
+            "user-agent":rand_string
+        } 
         
-        if not os.path.exists(dataset_path):
-            os.mkdir(dataset_path)   
-        if not os.path.exists(cat_path):
-                os.mkdir(cat_path)  
-                      
-        out = open(cat_path + '/' + str(key_creater(count)) + '.jpg', 'wb') 
-        out.write(picture.content)
-        out.close()
+        url = f"https://yandex.ru/images/search?p={i}&text=cat&uinfo=sw-1920-sh-1080-ww-878-wh-924-pd-1-wp-16x9_1920x1080&lr=51&rpt=image"
+        req=requests.get(url, headers=_headers)
+  
+        soup = BeautifulSoup(req.text, "html.parser")
+
+        src_list=[]
         
-        count += 1
+        try:
+            
+            for link in soup.find_all("img", class_="justifier__thumb"):
+                src_list.append(link.get("src"))
+            print("Картинки успешно сканированы")
+        
+        except Exception:
+            print("Нет картинок")
+        
+        
+        for img_url in src_list:
+            if img_url.find("n=13") !=-1:
+                try:
+                    print("Картинка", count)
+                    source = "https:" + img_url
+                    picture = requests.get(source)
+                    
+                    name_file=str(count)
+                          
+                    out = open(cat_path + '/' + name_file.zfill(4) + '.jpg', 'wb') 
+                    out.write(picture.content)
+                    out.close()
+                    
+                    time.sleep(0.25)
+                    
+                    count+=1
+                    if(count==count_imgs):
+                        return
+                    
+                except Exception:
+                    print("Error in: ", count)
+            
+    
 
  
-count_find=100   
+count_find=1100 
+  
 get_data_dog(count_find)
-#get_data_cat("https://yandex.ru/images/search?text=cat")
+
+print("Пауза")
+for sec in range(1,61):
+    print("Осталось ", 61-sec)
+    time.sleep(1)
+
+get_data_cat(count_find)
