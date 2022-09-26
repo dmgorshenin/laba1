@@ -2,9 +2,10 @@ import os
 import string
 import random
 import time
-from unicodedata import name
 import requests
 from bs4 import BeautifulSoup
+import cv2
+import numpy as np
 
 dog_path = "C://Users/User/nuck figgers/dataset/dog"
 dataset_path ="C://Users/User/nuck figgers/dataset"
@@ -127,11 +128,47 @@ def get_data_cat(count_imgs):
                 except Exception:
                     print("Error in: ", count)
             
+def is_similar(image1, image2):
+    return image1.shape == image2.shape and not(np.bitwise_xor(image1,image2).any())
+    
+def check_images(path,count):
+    import tqdm
+    c=count
+    images = []
+    for filename1 in os.listdir(path):
+        images.append((cv2.imread(os.path.join(path, filename1)), os.path.join(path, filename1)))
+    
+    for im, fname in tqdm.tqdm(images):
+        for im2, fname2 in images:
+            if(fname==fname2):
+                continue
+            if is_similar(im,im2):
+                print(fname, fname2)
+                os.remove(fname2)
+                c-=1;
+    return count-c
+                
+    
+    #for filename1 in tqdm.tqdm(os.listdir(path)):
+    #    img1=cv2.imread(os.path.join(path, filename1))
+    #    for filename2 in os.listdir(path):
+    #        img2=cv2.imread(os.path.join(path, filename2))
+    #        
+    #        if(filename1==filename2):
+    #            continue
+    #        
+    #        if is_similar(img1,img2):
+    #            print(filename1, filename2)
+    #            #os.remove(filename2)
+            
     
 
+
+
+ 
  
 count_find=1100 
-  
+
 get_data_dog(count_find)
 
 print("Пауза")
@@ -140,3 +177,8 @@ for sec in range(1,61):
     time.sleep(1)
 
 get_data_cat(count_find)
+
+new_count=check_images(dog_path,count_find)
+get_data_cat(new_count)
+new_count=check_images(cat_path,count_find)
+get_data_dog(new_count)
