@@ -59,14 +59,16 @@ def get_images(count_imgs, path, typename, indexs=None, page_count=0):
                     out.write(picture.content)
                     out.close()
 
-                    time.sleep(0.5)
+                    time.sleep(0.25)
 
                     count += 1
                     if(count == count_imgs):
                         return i
 
                 except Exception:
-                    print("Error in: ", count)
+                    if indexs[count]==IndexError:
+                        return None;
+                    print("Error in: \n", count)
 
 
 def is_similar(image1, image2):
@@ -74,7 +76,7 @@ def is_similar(image1, image2):
 
 
 def check_images(path):
-    c = 0
+
     images = []
     images2 = []
     for file_name in os.listdir(path):
@@ -107,8 +109,7 @@ def check_images(path):
                 except Exception:
                     continue
 
-                c += 1
-    return c, indexs
+    return indexs
 
 
 def main():
@@ -122,16 +123,15 @@ def main():
 
     page_number_cat = get_images(count_find, cat_path, "cat")
 
-    new_count, indexs = check_images(dog_path)
-    get_images(new_count, dog_path, "dog", indexs, page_number_dog)
+    indexs = check_images(dog_path)
+    get_images(count_find, dog_path, "dog", indexs, page_number_dog)
 
     print("Пауза")
-    for sec in range(1, 61):
-        print("Осталось ", 61-sec)
+    for sec in tqdm(range(1, 121), ):
         time.sleep(1)
 
-    new_count, indexs = check_images(cat_path)
-    get_images(new_count, cat_path, "cat", indexs, page_number_cat)
+    indexs = check_images(cat_path)
+    get_images(count_find, cat_path, "cat", indexs, page_number_cat)
 
 
 if __name__ == "__main__":

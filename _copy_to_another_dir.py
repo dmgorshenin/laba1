@@ -1,20 +1,15 @@
 import os
 import csv
 import shutil
-from this import d
 from tqdm import tqdm
 
 
-def copy_to_another_dir(class_name: str, number: int) -> None:
-    if __name__ == "__main__":
-        with open("dataset_another.csv", "a", newline="", encoding="utf8") as f:
-            copy_to_file = csv.writer(f, delimiter=";")
-            copy_to_file.writerow([f"C:/Users/User/nuck figgers/dataset_another/{class_name}_{str(number).zfill(4)}.jpg",
-                                   f"dataset_another/{class_name}_{str(number).zfill(4)}.jpg",
-                                   class_name])
-
-
 def copying_images(class_name: str) -> None:
+    """Copies images from this directory to another with the replacement of the name class/0000.jpg on class_0000.jpg
+
+    Args:
+        class_name (str): Name of the image class
+    """
     if __name__ == "__main__":
         if not os.path.exists("C:/Users/User/nuck figgers/dataset_another"):
             os.mkdir("C:/Users/User/nuck figgers/dataset_another")
@@ -24,11 +19,11 @@ def copying_images(class_name: str) -> None:
             if os.path.isfile(path):
                 shutil.copyfile(
                     path, f"C:/Users/User/nuck figgers/dataset_another/{class_name}_{str(i).zfill(4)}.jpg")
-                copy_to_another_dir(class_name, i)
 
 
 def main():
-    with open("dataset_another.csv", "w", encoding="utf8") as f:
+    """Main function"""
+    with open("dataset_another.csv", "w", newline="", encoding="utf8") as f:
         print_to_another = csv.writer(f, delimiter=";")
         print_to_another.writerow(
             ["The Absolute Way", "Relative Way", "Class"])
