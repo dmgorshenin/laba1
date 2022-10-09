@@ -21,15 +21,18 @@ def get_images(count_imgs, path, typename):
     
     count=0
     
-    for i in tqdm(range(3,999), desc="Страница "):
+    for i in tqdm(range(0,99), desc="Страница "):
         
         letters = string.ascii_lowercase
-        rand_string = ''.join(random.sample(letters, 10))
+        rand_string = ''.join(random.sample(letters, 7))
         _headers ={
             "User-Agent": rand_string
         }
+        if not typename=="cat":
+            url = f"https://yandex.ru/images/search?p={i}&text=dog&uinfo=sw-1920-sh-1080-ww-912-wh-881-pd-1.100000023841858-wp-16x9_2560x1440&lr=51&rpt=image"
+        else:
+            url = f"https://yandex.ru/images/search?p={i}&text=cat&uinfo=sw-1920-sh-1080-ww-878-wh-924-pd-1-wp-16x9_1920x1080&lr=51&rpt=image"
         
-        url = f"https://yandex.ru/images/search?p={i}&text={typename}&"
         req=requests.get(url, headers=_headers)
   
         soup = BeautifulSoup(req.text, "html.parser")
@@ -51,7 +54,7 @@ def get_images(count_imgs, path, typename):
                     out.write(picture.content)
                     out.close()
                     
-                    time.sleep(0.25)
+                    time.sleep(0.5)
                     
                     count+=1
                     if(count==count_imgs):
@@ -59,9 +62,9 @@ def get_images(count_imgs, path, typename):
                     
                 except Exception:
                     print("Error in: ", count)
-                    
-                         
+    
 
+                                         
 def is_similar(image1, image2):
     return image1.shape == image2.shape and not(np.bitwise_xor(image1,image2).any())
     
@@ -78,7 +81,7 @@ def check_images(path,count):
             if is_similar(im,im2):
                 print(fname, fname2)
                 os.remove(fname2)
-                c-=1;
+                c-=1
     return count-c
                 
  
@@ -88,8 +91,7 @@ count_find=1100
 get_images(count_find, dog_path, "dog")
 
 print("Пауза")
-for sec in range(1,61):
-    print("Осталось ", 61-sec)
+for sec in tqdm(range(1,301), ):
     time.sleep(1)
     
 get_images(count_find, cat_path, "cat")
