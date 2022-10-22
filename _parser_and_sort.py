@@ -14,7 +14,7 @@ dog_path = "C:/Users/User/nuck figgers/dataset/dog"
 cat_path = "C:/Users/User/nuck figgers/dataset/cat"
 
 
-def get_images(count_imgs, path, typename, indexs=None, page_count=0):
+def get_images(count_imgs, path, typename, indexs=None):
 
     if not os.path.exists("C:/Users/User/nuck figgers/dataset"):
         os.mkdir("C:/Users/User/nuck figgers/dataset")
@@ -23,7 +23,7 @@ def get_images(count_imgs, path, typename, indexs=None, page_count=0):
 
     count = 0
 
-    for i in tqdm(range(page_count, 99), desc="Страница "):
+    for i in tqdm(range(0, 99), desc="Страница "):
 
         letters = string.ascii_lowercase
         rand_string = ''.join(random.sample(letters, 7))
@@ -49,13 +49,13 @@ def get_images(count_imgs, path, typename, indexs=None, page_count=0):
                 try:
                     source = "https:" + img_url
                     picture = requests.get(source)
-
+                    
                     if indexs != None:
                         name_file = str(indexs[count])
                     else:
                         name_file = str(count)
-
-                    out = open(path + '/' + name_file.zfill(4) + '.jpg', 'wb')
+                        
+                    out = open(path + "/" + name_file.zfill(4) + ".jpg", "wb")
                     out.write(picture.content)
                     out.close()
 
@@ -115,23 +115,23 @@ def check_images(path):
 def main():
     count_find = 1250
 
-    page_number_dog = get_images(count_find, dog_path, "dog")
+    get_images(count_find, dog_path, "dog")
 
     print("Пауза")
     for sec in tqdm(range(1, 121), ):
         time.sleep(1)
 
-    page_number_cat = get_images(count_find, cat_path, "cat")
+    get_images(count_find, cat_path, "cat")
 
     indexs = check_images(dog_path)
-    get_images(count_find, dog_path, "dog", indexs, page_number_dog)
+    get_images(count_find, dog_path, "dog", indexs)
 
     print("Пауза")
     for sec in tqdm(range(1, 121), ):
         time.sleep(1)
 
     indexs = check_images(cat_path)
-    get_images(count_find, cat_path, "cat", indexs, page_number_cat)
+    get_images(count_find, cat_path, "cat", indexs)
 
 
 if __name__ == "__main__":

@@ -1,4 +1,5 @@
 import csv
+from operator import truediv
 import os
 
 from tqdm import tqdm
@@ -12,33 +13,36 @@ def write_to_file(class_name: str, number: int) -> None:
         number (int): The sequential number of the image
     """
     if __name__ == "__main__":
+        field_names = ["The Absolute Way", "Relative Way", "Class"]
+        
         with open("dataset.csv", "a", newline="", encoding="utf8") as f:
-            print_in_file = csv.writer(f, delimiter=";")
-            print_in_file.writerow([f"C:/Users/User/nuck figgers/dataset/{class_name}/{str(number).zfill(4)}.jpg",
-                                    f"dataset/{class_name}/{str(number).zfill(4)}.jpg",
-                                    class_name])
+            print_in_file = csv.DictWriter(
+                f, fieldnames=field_names, delimiter=";")
+
+            path = f"dataset/{class_name}/{str(number).zfill(4)}.jpg"
+
+            if os.path.isfile(path):
+                print_in_file.writerow({"The Absolute Way": f"C:/Users/User/nuck figgers/dataset/{class_name}/{str(number).zfill(4)}.jpg",
+                                        "Relative Way": f"dataset/{class_name}/{str(number).zfill(4)}.jpg",
+                                        "Class": class_name})
 
 
 def main() -> None:
     """Main function"""
+    field_names = ["The Absolute Way", "Relative Way", "Class"]
+
+    with open("dataset_random_dir.csv", "w", newline='') as f:
+        printer = csv.DictWriter(f, fieldnames=field_names, delimiter=";", )
+        printer.writeheader()
     
-    with open("dataset.csv", "w", newline='') as f:
-        printer = csv.writer(f, delimiter=";", )
-        printer.writerow(["The Absolute Way", "Relative Way", "Class"])
-
-    for i in tqdm(range(0, 1100)):
+    for i in tqdm(range(0,1250)):
         class_name = "cat"
-        path = f"dataset/{class_name}/{str(i).zfill(4)}.jpg"
+        write_to_file(class_name, i)
 
-        if os.path.isfile(path):
-            write_to_file(class_name, i)
+    for i in tqdm(range(0,1250)):
+        class_name="dog"
+        write_to_file(class_name, i)
 
-    for i in tqdm(range(0, 1100)):
-        class_name = "dog"
-        path = f"dataset/{class_name}/{str(i).zfill(4)}.jpg"
-
-        if os.path.isfile(path):
-            write_to_file(class_name, i)
 
 
 if __name__ == "__main__":
