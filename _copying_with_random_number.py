@@ -2,7 +2,7 @@ import os
 import random
 import shutil
 import csv
-from timeit import timeit
+
 from tqdm import tqdm
 
 
@@ -20,7 +20,7 @@ def writer_to_csvfile(class_name: str, number: int) -> None:
         with open("dataset_random_dir.csv", "a", newline="", encoding="utf8") as f:
             print_in_csv = csv.DictWriter(
                 f, fieldnames=field_names, delimiter=";")
-            
+
             print_in_csv.writerow({"The Absolute Way": f"C:/Users/User/nuck figgers/dataset_random/{str(number).zfill(5)}.jpg",
                                    "Relative Way": f"dataset_random/{str(number).zfill(5)}.jpg",
                                    "Class": class_name})

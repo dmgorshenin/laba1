@@ -1,5 +1,4 @@
 import csv
-from operator import truediv
 import os
 
 from tqdm import tqdm
@@ -14,7 +13,7 @@ def write_to_file(class_name: str, number: int) -> None:
     """
     if __name__ == "__main__":
         field_names = ["The Absolute Way", "Relative Way", "Class"]
-        
+
         with open("dataset.csv", "a", newline="", encoding="utf8") as f:
             print_in_file = csv.DictWriter(
                 f, fieldnames=field_names, delimiter=";")
@@ -34,15 +33,14 @@ def main() -> None:
     with open("dataset_random_dir.csv", "w", newline='') as f:
         printer = csv.DictWriter(f, fieldnames=field_names, delimiter=";", )
         printer.writeheader()
-    
-    for i in tqdm(range(0,1250)):
+
+    for i in tqdm(range(0, 1250)):
         class_name = "cat"
         write_to_file(class_name, i)
 
-    for i in tqdm(range(0,1250)):
-        class_name="dog"
+    for i in tqdm(range(0, 1250)):
+        class_name = "dog"
         write_to_file(class_name, i)
-
 
 
 if __name__ == "__main__":
