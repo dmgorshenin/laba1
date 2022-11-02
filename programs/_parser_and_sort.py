@@ -1,4 +1,3 @@
-from logging import exception
 import os
 import random
 import string
@@ -49,12 +48,12 @@ def get_images(count_imgs, path, typename, indexs=None):
                 try:
                     source = "https:" + img_url
                     picture = requests.get(source)
-                    
+
                     if indexs != None:
                         name_file = str(indexs[count])
                     else:
                         name_file = str(count)
-                        
+
                     out = open(path + "/" + name_file.zfill(4) + ".jpg", "wb")
                     out.write(picture.content)
                     out.close()
@@ -66,8 +65,8 @@ def get_images(count_imgs, path, typename, indexs=None):
                         return i
 
                 except Exception:
-                    if indexs[count]==IndexError:
-                        return None;
+                    if indexs[count] == IndexError:
+                        return None
                     print("Error in: \n", count)
 
 
@@ -91,19 +90,19 @@ def check_images(path):
         for im2, fname2 in images2:
             if(fname == fname2):
                 continue
-            
+
             if is_similar(im, im2):
                 print(fname, fname2)
-                
+
                 try:
                     os.remove(fname)
                 except Exception as e:
                     print(e)
-                    
+
                 temp = fname.replace(f"{path}\\", "")
                 temp = temp.replace(".jpg", "")
                 indexs.append(int(temp))
-                
+
                 try:
                     images2.remove(fname2)
                 except Exception:
