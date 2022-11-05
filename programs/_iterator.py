@@ -51,4 +51,3 @@ class Iterator:
 
         elif self.counter == len(self.list):
             raise StopIteration
-

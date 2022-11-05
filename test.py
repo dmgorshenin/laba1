@@ -3,6 +3,7 @@ from concurrent.futures.thread import _worker
 from xmlrpc.server import SimpleXMLRPCRequestHandler
 
 
+
 def main():
     katet1 = float(input("Катет 1: "))
     katet2 = float(input("Катет 2: "))
@@ -16,6 +17,7 @@ def main():
             print(hypotenuse.result())
         except Exception as err:
             print(err)
+  
 
 
 if __name__ == "__main__":
