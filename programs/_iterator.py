@@ -33,7 +33,7 @@ class Iterator:
             raise FileNotFoundError
 
     def __iter__(self):
-        return self
+        return self.list[self.counter][0]
 
     def __next__(self) -> str:
         """The function of switching to the next instance of the list in the class object

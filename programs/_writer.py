@@ -57,7 +57,7 @@ def write_annotation(path_to_dataset: str, csv_path: str) -> str or None:
 
     else:
         field_names = ["The Absolute Way", "Relative Way", "Class"]
-        with open(os.path.join(csv_path, "_dataset.csv"), "w", newline="", encoding="utf8") as f:
+        with open(csv_path, "w", newline="", encoding="utf8") as f:
             printer = csv.DictWriter(
                 f, fieldnames=field_names, delimiter=";")
             printer.writeheader()
@@ -68,7 +68,7 @@ def write_annotation(path_to_dataset: str, csv_path: str) -> str or None:
                         if os.path.isfile(os.path.join(path_to_cat, f))])
 
         for i in tqdm(range(0, num_files)):
-            with open(os.path.join(csv_path, "_dataset.csv"), "a", newline="", encoding="utf8") as f:
+            with open(csv_path, "a", newline="", encoding="utf8") as f:
                 print_in_file = csv.DictWriter(
                     f, fieldnames=field_names, delimiter=";")
 
@@ -85,7 +85,7 @@ def write_annotation(path_to_dataset: str, csv_path: str) -> str or None:
                         if os.path.isfile(os.path.join(path_to_dog, f))])
 
         for i in tqdm(range(0, num_files)):
-            with open(os.path.join(csv_path, "_dataset.csv"), "a", newline="", encoding="utf8") as f:
+            with open(csv_path, "a", newline="", encoding="utf8") as f:
                 print_in_file = csv.DictWriter(
                     f, fieldnames=field_names, delimiter=";")
 
@@ -96,7 +96,7 @@ def write_annotation(path_to_dataset: str, csv_path: str) -> str or None:
                                             "Relative Way": os.path.relpath(path),
                                             "Class": class_name})
         
-        return os.path.join(csv_path, "_dataset.csv")
+        return csv_path
                     
 
 

@@ -22,7 +22,7 @@ def get_images(count_imgs, path, typename, indexs=None):
 
     count = 0
 
-    for i in tqdm(range(0, 99), desc="Страница "):
+    for i in tqdm(range(1, 99), desc="Страница "):
 
         letters = string.ascii_lowercase
         rand_string = ''.join(random.sample(letters, 7))
@@ -54,11 +54,11 @@ def get_images(count_imgs, path, typename, indexs=None):
                     else:
                         name_file = str(count)
 
-                    out = open(path + "/" + name_file.zfill(4) + ".jpg", "wb")
-                    out.write(picture.content)
-                    out.close()
+                    with open(os.path.join(path, f"{name_file.zfill(4)}.jpg"), "wb") as out:
+                        out.write(picture.content)
+                        out.close()
 
-                    time.sleep(0.25)
+                    time.sleep(0.5)
 
                     count += 1
                     if(count == count_imgs):
@@ -68,6 +68,7 @@ def get_images(count_imgs, path, typename, indexs=None):
                     if indexs[count] == IndexError:
                         return None
                     print("Error in: \n", count)
+
 
 
 def is_similar(image1, image2):
@@ -86,27 +87,25 @@ def check_images(path):
                         os.path.join(path, file_name)))
 
     indexs = []
+
     for im, fname in tqdm(images):
+        
         for im2, fname2 in images2:
             if(fname == fname2):
                 continue
 
             if is_similar(im, im2):
                 print(fname, fname2)
-
-                try:
-                    os.remove(fname)
-                except Exception as e:
-                    print(e)
-
-                temp = fname.replace(f"{path}\\", "")
+                
+                temp = fname2.replace(f"{path}\\", "")
                 temp = temp.replace(".jpg", "")
                 indexs.append(int(temp))
 
                 try:
-                    images2.remove(fname2)
-                except Exception:
-                    continue
+                    os.remove(fname2)
+                except Exception as e:
+                    print(e)
+                    pass
 
     return indexs
 
@@ -114,23 +113,23 @@ def check_images(path):
 def main():
     count_find = 1250
 
-    get_images(count_find, dog_path, "dog")
+    # get_images(count_find, dog_path, "dog")
 
-    print("Пауза")
-    for sec in tqdm(range(1, 121), ):
-        time.sleep(1)
+    # print("Пауза")
+    # for sec in tqdm(range(1, 121), ):
+    #     time.sleep(1)
 
     get_images(count_find, cat_path, "cat")
 
-    indexs = check_images(dog_path)
-    get_images(count_find, dog_path, "dog", indexs)
+    # indexs = check_images(dog_path)
+    # get_images(count_find, dog_path, "dog", indexs)
 
-    print("Пауза")
-    for sec in tqdm(range(1, 121), ):
-        time.sleep(1)
+    # print("Пауза")
+    # for sec in tqdm(range(1, 121), ):
+    #     time.sleep(1)
 
-    indexs = check_images(cat_path)
-    get_images(count_find, cat_path, "cat", indexs)
+    # indexs = check_images(cat_path)
+    # get_images(count_find, cat_path, "cat", indexs)
 
 
 if __name__ == "__main__":
